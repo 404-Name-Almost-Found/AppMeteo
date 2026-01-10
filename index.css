@@ -25,14 +25,49 @@ html, body {
 }
 
 .seleziona{
-    display: inline-block;
     font-family: nature_medium;
-    margin-left: 10%;
-    margin-right: 10%;
+    font-size: 80%;
+    padding:10px;
+    text-align: center;
+    width: 27%;
 }
-
 #map {
     height: 600px;
     width: 600px;
     margin: 0 auto;
+}
+.container{
+    text-align: center;
+    display:flex;
+    justify-content: center;
+}
+
+
+/*stile pagina dettagli*/
+.dettagli{
+    background-color: rgb(14, 31, 83);
+    max-width: 600px;
+    margin: auto;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    padding:10px 20px;
+    color:white;
+}
+.commenti{
+    color:rgb(171, 168, 168);
+    font-size:60%;
+}
+.riga{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
+h1{
+    margin:0;
+}
+p{
+    margin:0;
+}
+.destra{
+    font-size:110%;
 }
