@@ -1,0 +1,38 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+.title{
+    text-align: center;
+    color: rgb(0, 179, 255);
+    background-color: rgb(48, 48, 238);
+    font-size: 3em;
+    margin: 0px;    
+    font-family: nature_black;
+    padding-top: 20px;
+    padding-bottom: 20px;;
+}
+
+@font-face {
+    font-family: nature_black; /* set name */
+    src: url(zt_nature/ZTNature-Black.ttf); /* url of the font */
+}
+
+@font-face {
+    font-family: nature_medium; /* set name */
+    src: url(zt_nature/ZTNature-Medium.ttf); /* url of the font */
+}
+
+.seleziona{
+    display: inline-block;
+    font-family: nature_medium;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+#map {
+    height: 600px;
+    width: 600px;
+    margin: 0 auto;
+}
