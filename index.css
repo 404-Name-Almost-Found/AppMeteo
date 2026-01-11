@@ -58,6 +58,7 @@ html, body {
     font-size:60%;
 }
 .riga{
+    width:100%;
     display:flex;
     justify-content: space-between;
     align-items: center;
@@ -68,6 +69,57 @@ h1{
 p{
     margin:0;
 }
-.destra{
-    font-size:110%;
+.destra img{
+    width: 50px; 
+    height: 50px;
+}
+.containerOra{
+    display:flex;
+    color:rgb(171, 168, 168);
+    font-size:60%;
+}
+.containerTemperature{
+    
+    margin-top:20px;
+    display:flex;
+}
+.TemperaturaOra{
+    width:16.67%;
+    text-align:center;
+    justify-content: center;
+}
+.containerIcone{
+    display:flex;
+    font-size:250%;
+}
+.iconaBox{
+    width:16.67%;
+    text-align:center;
+    justify-content: center;
+    margin:0;
+}
+.icone{
+    width:40px;
+    height:40px;
+}
+h3{
+    margin:0;
+}
+.orario{
+    width:16.67%;
+    text-align:center;
+    justify-content: center;
+}
+.orario p{
+    margin:0;
+}
+.commentiOrario{
+    color:rgb(171, 168, 168);
+    font-size:60%;
+}
+.containerGiorniSuccessivi{
+    margin-top:20px;
+    display:flex;
+    background-color: rgb(29, 50, 116);
+    border-radius:10px;
 }
