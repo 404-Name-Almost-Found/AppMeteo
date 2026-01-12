@@ -1,7 +1,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Dettagli Meteo</title>
+        <title id="titolo">Dettagli Meteo</title>
         <link rel="stylesheet" href="index.css">
         <style> 
             body{
@@ -14,9 +14,17 @@
         </style>
     </head>
     <body>
+        <div id="loader">Caricamento...</div>
+        <div id="content" style="display:none"></div>
         <div class="dettagli">
-            <div>
-                <p class="commenti" id="NomeComune"></p>
+            <div class="riga">
+                <div class="sinistra">
+                    <p class="commenti" style="font-size:120%" id="NomeComune"></p>
+                </div>
+                <div class="destra">
+                    <p class="commenti" id="clock"></p>
+                    <p class="commenti" id="LastUpdate"></p>
+                </div>
             </div>
             <div class="riga">
                 <div class="sinistra">
@@ -95,8 +103,60 @@
                 </div>
             </div>
             <div class="containerGiorniSuccessivi">
-                <div>
-                    <p>ssssss</p>
+                <div class="rigaGiorni">
+                    <div class="sinistraGiorni">
+                        <p>Giorno</p>
+                    </div>
+                    <div class="centroGiorni">
+                        <img src="#">
+                    </div>
+                    <div class="destraGiorni">
+                        <p>Temperatura</p>
+                    </div>
+                </div>
+                <div class="rigaGiorni">
+                    <div class="sinistraGiorni">
+                        <p>Giorno</p>
+                    </div>
+                    <div class="centroGiorni">
+                        <img src="#">
+                    </div>
+                    <div class="destraGiorni">
+                        <p>Temperatura</p>
+                    </div>
+                </div>
+                <div class="rigaGiorni">
+                    <div class="sinistraGiorni">
+                        <p>Giorno</p>
+                    </div>
+                    <div class="centroGiorni">
+                        <img src="#">
+                    </div>
+                    <div class="destraGiorni">
+                        <p>Temperatura</p>
+                    </div>
+                </div>
+                <div class="rigaGiorni">
+                    <div class="sinistraGiorni">
+                        <p>Giorno</p>
+                    </div>
+                    <div class="centroGiorni">
+                        <img src="#">
+                    </div>
+                    <div class="destraGiorni">
+                        <p>Temperatura</p>
+                    </div>
+                </div>
+                <div class="rigaGiorni">
+                    <div class="sinistraGiorni">
+                        <p>Giorno</p>
+                    </div>
+                    <div class="centroGiorni">
+                        <img src="#">
+                    </div>
+                    <div class="destraGiorni">
+                        <p>Temperatura</p>
+                    </div>
                 </div>
             </div>
         </div>

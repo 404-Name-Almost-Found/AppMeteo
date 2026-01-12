@@ -123,10 +123,9 @@ selectValue.addEventListener("change",function(){
                     console.log(ordinate.results[0].longitude)
                     lat.value=ordinate.results[0].latitude
                     lon.value=ordinate.results[0].longitude
-                })
-        invio=true;
+                    invio=true;
+                })   
     }
-    console.log(invio)
 })
 form.addEventListener("submit",function(e){
     if(!invio)
