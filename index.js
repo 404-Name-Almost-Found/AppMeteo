@@ -2,12 +2,13 @@
 const map = L.map('map').setView([41., 12.0], 5);
 
 // Add OpenStreetMap tiles
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OpenStreetMap contributors' }).addTo(map);
-
-/*
-// Add a marker
-// il marker ha la priorità sulla posizione iniziale della mappa
-*/
+L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors'
+    }
+).addTo(map);
 
 
 const selectValue=document.getElementById("selettore");
@@ -71,16 +72,10 @@ selectRegione.addEventListener("change",function(){
                 elem.setAttribute('name', ElencoProvince[i][1])
                 selectProvincia.append(elem);
                 arrayProvincia[j++]=ElencoProvince[i][1]
-
             }
         }
     }
 })
-
-
-
-
-
 
 
 selectProvincia.addEventListener("change",function(){
@@ -128,30 +123,7 @@ selectValue.addEventListener("change",function(){
     }
 })
 
-
-let mostraComuni=document.getElementById("mostra_comuni")
-
-mostraComuni.addEventListener("click",function(){
-    const nameOption = selectProvincia.options[selectProvincia.selectedIndex].getAttribute("name")
-    let elencoCoordinate=[]
-    for(let i=0;i<ElencoComuni.length;i++)
-    {
-        const URL="https://geocoding-api.open-meteo.com/v1/search?name="+ElencoComuni[i][0].replaceAll(" ","%20")+"&count=1&language=it&format=json"
-            fetch(URL)
-                .then(response1 => response1.json())
-                    .then(ordinate =>{
-                        //let coordinate=[ordinate.results[0].latitude,ordinate.results[0].longitude]
-                        if(ElencoComuni[i][1] === nameOption)
-                        {
-                            L.marker([ordinate.results[0].latitude, ordinate.results[0].longitude]).addTo(map);
-                            console.log(map)
-                        }
-                            //elencoCoordinate[i]=coordinate
-            }) 
-    }
-})
-
-
+//controllo prima dell'invio
 form.addEventListener("submit",function(e){
     if(!invio)
     {
@@ -159,4 +131,73 @@ form.addEventListener("submit",function(e){
         
     }
 })
+
+//per mostrare i comuni sulla cartina
+const comuniLayer = L.layerGroup().addTo(map);
+let mostraComuni=document.getElementById("mostra_comuni")
+
+mostraComuni.addEventListener("click", async function () {
+
+    const provinciaSelezionata = selectProvincia.options[selectProvincia.selectedIndex].getAttribute("name");
+
+    // Rimuove tutti i marker precedenti
+    comuniLayer.clearLayers();
+
+    // Filtra solo i comuni della provincia selezionata
+    const comuniProvincia = ElencoComuni.filter(c => c[1] === provinciaSelezionata)
+
+    const richieste = comuniProvincia.map(comune => {
+        //coustruisce l'url per l'API
+        const url =
+            "https://geocoding-api.open-meteo.com/v1/search?name=" +
+            comune[0].replaceAll(" ", "%20") +
+            "&count=1&language=it&format=json";
+
+        return fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                if (data.results && data.results.length > 0) {
+                    const { latitude, longitude } = data.results[0]
+                    return [latitude, longitude, comune[0]]
+                }
+            })
+    })
+
+    //Esegue più fetch in parallelo e aspetta che finiscano tutte
+    const coordinate = await Promise.all(richieste)
+
+    //aggiunge tutti i marker alla mappa
+    coordinate.forEach(c => {
+        if (c) {
+            L.marker([c[0], c[1]])
+            .addTo(comuniLayer)
+            .bindPopup(`<b>${c[2]}</b><br>Clicca per selezionare`)
+            .on("click", () => {
+                selezionaComuneDaMappa(c[0], c[1], c[2]);
+            })
+            //senza funziona 1 sola volta
+            setInterval(500, selezionaComuneDaMappa)
+        }
+    })
+})
+
+
+let markerSelezionato = null;
+function selezionaComuneDaMappa(latitudine, longitudine, nomeComune) {
+
+    //aggiorna i valori quando si clicca su un marker
+    lat.value = latitudine;
+    lon.value = longitudine;
+    invio = true;
+
+    for (let i = 0; i < selectValue.options.length; i++) {
+        if (selectValue.options[i].value === nomeComune) {
+            selectValue.selectedIndex = i;
+            break;
+        }
+    }
+
+    markerSelezionato = this;
+}
+
 
