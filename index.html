@@ -19,7 +19,7 @@
 
 
         <h2 class="title"><b>APP METEO</b></h2>
-        <form action="dettagli.html" method="get" id="formSelezione"></form>
+        <form action="dettagli.html" method="get" id="formSelezione">
         <div class="container">
             <div class="containerSelect">
             <select id="selectRegione" class="seleziona">
@@ -36,17 +36,15 @@
         </div>
         <input type="hidden" name="lat" value="0" id="lat">
         <input type="hidden" name="lon" value="0" id="lon">
-        <div id="map"></div>
         <center><button type="submit" id="invia">Invia</button></center>
     </form>
-        <!--<center><button type="button" id="mostra_comuni">mostra comuni</button></center> -->
+        <center><button id="mostra_comuni">mostra comuni</button></center> 
 
         <br><br><br><br><br><br>
 
-        
+        <div id="map"></div>
 
         <!-- script della pagina-->
         <script src="index.js"></script>
     </body>
-
 </html>
