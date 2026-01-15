@@ -1,17 +1,19 @@
 html, body {
     height: 100%;
     margin: 0;
+    background-color: aliceblue;
 }
 
 .title{
     text-align: center;
-    color: rgb(0, 179, 255);
-    background-color: rgb(48, 48, 238);
+    color: aliceblue;
+    background-color: rgb(69, 98, 194);
     font-size: 3em;
-    margin: 0px;    
+    margin: auto;    
     font-family: nature_black;
     padding-top: 20px;
-    padding-bottom: 20px;;
+    padding-bottom: 20px;
+    width:60%;
 }
 
 @font-face {
@@ -26,22 +28,33 @@ html, body {
 
 .seleziona{
     font-family: nature_medium;
-    font-size: 80%;
-    padding:10px;
+    font-size: 120%;
+    padding:15px;
     text-align: center;
-    width: 27%;
+    background-color: aliceblue;
+    color:rgb(69, 98, 194);
+    border-radius: 10px;
+    width:32%;
+    margin:5px;
 }
 #map {
     height: 600px;
     width: 600px;
-    margin: 0 auto;
+    margin: auto;
+}
+.containerSelect{
+    display:flex;
+    background-color: rgb(69, 98, 194);; 
+    justify-content: space-between;
+    padding:10px;
 }
 .container{
-    text-align: center;
-    display:flex;
-    justify-content: center;
+    width:60%;
+    margin:auto;
+    background-color: rgb(69, 98, 194);; 
+    justify-content: space-between;
+    height:100%;
 }
-
 
 /*stile pagina dettagli*/
 .dettagli{
@@ -159,4 +172,16 @@ h3{
   font-size: 2rem;
   z-index: 9999;
 }
-
+@media screen and (min-width:800px) and (max-width:1200px)
+{
+    .containerSelect{
+        display:block;
+    }
+    .seleziona{
+        width:100%;
+    }
+    #map{
+        width:400px;
+        height:400px;
+    }
+}

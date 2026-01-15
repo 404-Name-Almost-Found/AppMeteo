@@ -1,5 +1,5 @@
 // Initialize the map
-const map = L.map('map').setView([45.4064, 11.8768], 13);
+const map = L.map('map').setView([41., 12.0], 5);
 
 // Add OpenStreetMap tiles
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OpenStreetMap contributors' }).addTo(map);
@@ -8,16 +8,6 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19,
 // Add a marker
 // il marker ha la priorità sulla posizione iniziale della mappa
 */
-const marker = L.marker([45.4064, 11.8768]).addTo(map);
-
-
-let circle = L.circle([45.4064, 11.8768], {
-    color: 'red',
-    fillColor: '#f03',
-    fillOpacity: 0.5,
-    radius: 500
-}).addTo(map);
-
 
 
 const selectValue=document.getElementById("selettore");
@@ -31,6 +21,7 @@ let regioneCont=0;
 const lat=document.getElementById("lat")
 const lon=document.getElementById("lon")
 
+//popolare gli elenchi
 fetch("https://raw.githubusercontent.com/matteocontrini/comuni-json/master/comuni.json")
     .then(response => response.json())
     .then(comuni => {
@@ -59,6 +50,7 @@ fetch("https://raw.githubusercontent.com/matteocontrini/comuni-json/master/comun
 const form=document.getElementById("formSelezione")
 let invio=false;
 
+
 selectRegione.addEventListener("change",function(){
     const arrayProvincia=[]
     let j=0
@@ -84,6 +76,13 @@ selectRegione.addEventListener("change",function(){
         }
     }
 })
+
+
+
+
+
+
+
 selectProvincia.addEventListener("change",function(){
    const nameOption = this.options[this.selectedIndex].getAttribute("name")
    while(selectValue.firstChild) {  
@@ -124,12 +123,40 @@ selectValue.addEventListener("change",function(){
                     lat.value=ordinate.results[0].latitude
                     lon.value=ordinate.results[0].longitude
                     invio=true;
+                    console.log(invio)
                 })   
     }
 })
+
+
+let mostraComuni=document.getElementById("mostra_comuni")
+
+mostraComuni.addEventListener("click",function(){
+    const nameOption = selectProvincia.options[selectProvincia.selectedIndex].getAttribute("name")
+    let elencoCoordinate=[]
+    for(let i=0;i<ElencoComuni.length;i++)
+    {
+        const URL="https://geocoding-api.open-meteo.com/v1/search?name="+ElencoComuni[i][0].replaceAll(" ","%20")+"&count=1&language=it&format=json"
+            fetch(URL)
+                .then(response1 => response1.json())
+                    .then(ordinate =>{
+                        //let coordinate=[ordinate.results[0].latitude,ordinate.results[0].longitude]
+                        if(ElencoComuni[i][1] === nameOption)
+                        {
+                            L.marker([ordinate.results[0].latitude, ordinate.results[0].longitude]).addTo(map);
+                            console.log(map)
+                        }
+                            //elencoCoordinate[i]=coordinate
+            }) 
+    }
+})
+
+
 form.addEventListener("submit",function(e){
     if(!invio)
     {
         e.preventDefault();
+        
     }
 })
+

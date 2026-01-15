@@ -19,9 +19,9 @@
 
 
         <h2 class="title"><b>APP METEO</b></h2>
+        <form action="dettagli.html" method="get" id="formSelezione"></form>
         <div class="container">
-
-        <form action="dettagli.html" method="get" id="formSelezione">
+            <div class="containerSelect">
             <select id="selectRegione" class="seleziona">
                 <option name="null">Seleziona Regione</option>
             </select>
@@ -31,12 +31,14 @@
             <select id="selettore" class="seleziona" name="comune">
                 <option name="null">Seleziona Comune</option>
             </select>
+            </div>
 
         </div>
         <input type="hidden" name="lat" value="0" id="lat">
         <input type="hidden" name="lon" value="0" id="lon">
-        <center><button type="submit" id="invia">Invia</button></center>   
+        <center><button type="submit" id="invia">Invia</button></center>
     </form>
+        <!--<center><button type="button" id="mostra_comuni">mostra comuni</button></center> -->
 
         <br><br><br><br><br><br>
 
