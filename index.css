@@ -3,19 +3,17 @@ html, body {
     margin: 0;
     background-color: aliceblue;
 }
-
+* { margin: 0; padding: 0; box-sizing: border-box; }
 .title{
     text-align: center;
     color: aliceblue;
-    background-color: rgb(69, 98, 194);
     font-size: 3em;
-    margin: auto;    
+    margin:0 auto;   
     font-family: nature_black;
-    padding-top: 20px;
     padding-bottom: 20px;
     width:60%;
 }
-
+h2 { margin-top: 0; }
 @font-face {
     font-family: nature_black; /* set name */
     src: url(zt_nature/ZTNature-Black.ttf); /* url of the font */
@@ -31,31 +29,128 @@ html, body {
     font-size: 120%;
     padding:15px;
     text-align: center;
-    background-color: aliceblue;
-    color:rgb(69, 98, 194);
+    background-color:transparent;
+    color:aliceblue;
     border-radius: 10px;
     width:32%;
     margin:5px;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
+.seleziona:hover{
+    box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+    transform: translateY(-2px);
+}
+@keyframes animate{ 
+    0% { 
+        background-position: 0%; 
+    } 
+    100% 
+    { 
+        background-position: 400%; 
+    } 
+}
+
+main {
+    position: relative;
+    width: 100%;
+    height: 100vh; /* o quello che preferisci */
+    overflow: hidden;
+}
+
+/* CAROUSEL DI SFONDO */
+.carousel-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    animation: slide 15s infinite linear;
+}
+
+/* FILTRO GRIGIO TRASPARENTE */
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4); /* grigio scuro trasparente */
+    z-index: 1;
+}
+
+/* CONTENUTO IN PRIMO PIANO */
+.content {
+    position: relative;
+    z-index: 2;
+    color: white;
+    text-align: center;
+    padding-top:10px;
+}
+
+/* ANIMAZIONE CAROUSEL */
+@keyframes slide {
+    0%   { background-image: url("img/giornataNeve.jpg"); }
+    33%  { background-image: url("img/giornataNuvolosa.jpg"); }
+    66%  { background-image: url("img/giornataSole.jpg"); }
+    100% { background-image: url("img/giornataNeve.jpg"); }
+}
+
+
+
 #map {
-    height: 600px;
-    width: 600px;
+    height: 60vh;
+    width: 60%;
     margin: auto;
 }
 .containerSelect{
     display:flex;
-    background-color: rgb(69, 98, 194);; 
+    /*background-color: rgb(69, 98, 194);*/
     justify-content: space-between;
     padding:10px;
 }
 .container{
     width:60%;
     margin:auto;
-    background-color: rgb(69, 98, 194);; 
+    /*background-color: rgb(69, 98, 194);*/
     justify-content: space-between;
     height:100%;
 }
+button:hover{
+    box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+    transform: translateY(-2px);
+    animation: animate 8s linear infinite;
+}
 
+.button-container{
+    margin:auto;
+    display:flex;
+    justify-content: center;
+    gap:20px;
+}
+button{
+    position: relative;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    background-color: transparent;
+    color:white;
+    padding:7px;
+    border-radius: 10px;
+}
+button:hover{
+    box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+    transform: translateY(-2px);
+    animation: animate 8s linear infinite;
+}
+button::before{
+    content: '';
+    position: absolute;
+    inset:-5px;
+    z-index:-1;
+    background: linear-gradient(90deg,#03a9f4,#125399,#062d59,#011b27);
+    background-size: 400%;
+    border-radius: 40px;
+    opacity:0;
+}
+button:hover::before{
+    filter: blur(20px);
+    opacity:1;
+    animation: animate 8s linear infinite;
+}
 /*stile pagina dettagli*/
 .dettagli{
     background-color: rgb(14, 31, 83);
@@ -144,9 +239,11 @@ h3{
     color:rgb(171, 168, 168);
     margin:1px;
     border-radius:10px;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 .rigaGiorni:hover{
     background-color: rgb(43, 67, 146);
+    transform: translateY(-2px);
 }
 .sinistraGiorni{
     width:33%;
@@ -172,7 +269,9 @@ h3{
   font-size: 2rem;
   z-index: 9999;
 }
-@media screen and (min-width:800px) and (max-width:1200px)
+
+
+@media screen and (max-width:1000px)
 {
     .containerSelect{
         display:block;
@@ -180,8 +279,10 @@ h3{
     .seleziona{
         width:100%;
     }
-    #map{
-        width:400px;
-        height:400px;
+    .commenti{
+        font-size:80%;
+    }
+    .commentiOrario{
+        font-size:80%;
     }
 }

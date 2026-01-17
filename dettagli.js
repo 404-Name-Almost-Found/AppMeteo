@@ -3,7 +3,7 @@ const urlParams=new URLSearchParams(queryString)
 document.addEventListener("DOMContentLoaded",function(){
     document.getElementById("loader").style.display = "none"
     //const URLMeteo="https://api.open-meteo.com/v1/forecast?latitude="+urlParams.get("lat")+"&longitude="+urlParams.get("lon")+"&daily=temperature_2m_max,temperature_2m_min,rain_sum&current=wind_speed_10m,temperature_2m,precipitation&utm_source=chatgpt.com"
-    const URLMeteo="https://api.open-meteo.com/v1/forecast?latitude="+urlParams.get("lat")+"&longitude="+urlParams.get("lon")+"&daily=weather_code,sunrise,sunset,temperature_2m_max,temperature_2m_min&hourly=weather_code,temperature_2m,cloud_cover,cloud_cover_low,cloud_cover_mid,cloud_cover_high,wind_speed_10m,precipitation&current=weather_code,temperature_2m,wind_speed_10m,relative_humidity_2m,is_day,rain,cloud_cover,is_day&utm_source=chatgpt.com"
+    const URLMeteo="https://api.open-meteo.com/v1/forecast?latitude="+urlParams.get("lat")+"&longitude="+urlParams.get("lon")+"&daily=weather_code,sunrise,sunset,temperature_2m_max,temperature_2m_min&hourly=relative_humidity_2m,weather_code,temperature_2m,cloud_cover,cloud_cover_low,cloud_cover_mid,cloud_cover_high,wind_speed_10m,precipitation&current=relative_humidity_2m,weather_code,temperature_2m,wind_speed_10m,relative_humidity_2m,is_day,rain,cloud_cover,is_day&utm_source=chatgpt.com"
     fetch(URLMeteo)
         .then(response => response.json())
         .then(meteo =>{
@@ -32,19 +32,19 @@ document.addEventListener("DOMContentLoaded",function(){
             , 1000);
             lastUpdate.innerHTML="Ultima Rilevazione: "+meteo.current.time
 
+            
             if (meteo.current.time === getFormattedDate()){
                 temperaturaAttuale.innerHTML=meteo.current.temperature_2m+"°C"
                 weatherCode==meteo.current.weather_code
                 //cloudiness=meteo.current.cloud_cover
                 //precipitation=meteo.current.precipitation
                 isDay=meteo.current.is_day
-                tempMaxMinVento.innerHTML="Max: "+meteo.daily.temperature_2m_max[0]+"°C - Min: "+meteo.daily.temperature_2m_min[0]+"°C"+" - Vento: "+meteo.current.wind_speed_10m+" km/h"
+                tempMaxMinVento.innerHTML="Max: "+meteo.daily.temperature_2m_max[0]+"°C - Min: "+meteo.daily.temperature_2m_min[0]+"°C"+" - Vento: "+meteo.current.wind_speed_10m+" km/h<br>Umidità: "+meteo.current.relative_humidity_2m+"%"
             }
             else{
                 temperaturaAttuale.innerHTML=meteo.hourly.temperature_2m[indiceOra]+"°C"
                 weatherCode=meteo.hourly.weather_code[indiceOra]
-                tempMaxMinVento.innerHTML="Max: "+meteo.daily.temperature_2m_max[0]+"°C - Min: "+meteo.daily.temperature_2m_min[0]+"°C"+" - Vento: "+meteo.hourly.wind_speed_10m[indiceOra]+" km/h"
-
+                tempMaxMinVento.innerHTML="Max: "+meteo.daily.temperature_2m_max[0]+"°C - Min: "+meteo.daily.temperature_2m_min[0]+"°C"+" - Vento: "+meteo.hourly.wind_speed_10m[indiceOra]+" km/h<br>Umidità: "+meteo.hourly.relative_humidity_2m[indiceOra]+"%"
                 //cloudiness=meteo.hourly.cloud_cover[indiceOra]
                 //precipitation=meteo.hourly.precipitation[indiceOra] 
                 while(meteo.daily.sunrise[day].substring(0,10)===getFormattedDate().substring(0,10)){

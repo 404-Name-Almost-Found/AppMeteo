@@ -28,14 +28,13 @@ fetch("https://raw.githubusercontent.com/matteocontrini/comuni-json/master/comun
     .then(comuni => {
         for(let i=0;i<comuni.length;i++){
             ElencoComuni[i]=[comuni[i].nome,comuni[i].sigla] //comune=[nomeComune, siglaProvincia]
-            if(!ElencoRegioni.includes(comuni[i].regione["nome"]))
-            {
-                ElencoRegioni[regioneCont++]=comuni[i].regione["nome"] 
-            }
+            ElencoRegioni[i]=comuni[i].regione["nome"] 
             ElencoProvince[i]=[comuni[i].provincia["nome"],comuni[i].sigla,comuni[i].regione["nome"]] //provincia=[nomeProvincia, siglaProvincia, nomeRegione]
         }
+        ElencoRegioni=rimuoviDuplicati(ElencoRegioni)
         ElencoRegioni.sort()
-        for(let i=0;i<regioneCont;i++)
+
+        for(let i=0;i<ElencoRegioni.length;i++)
         {
             const elem=document.createElement("option")
             elem.name=ElencoRegioni[i]
@@ -198,6 +197,9 @@ function selezionaComuneDaMappa(latitudine, longitudine, nomeComune) {
     }
 
     markerSelezionato = this;
+}
+function rimuoviDuplicati(arr) { 
+    return [...new Set(arr)]
 }
 
 

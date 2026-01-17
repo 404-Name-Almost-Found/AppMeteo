@@ -12,37 +12,47 @@
         
     </head>
     <body>
+        
         <!-- Leaflet JS -->
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
         crossorigin=""></script>
-
-
-        <h2 class="title"><b>APP METEO</b></h2>
-        <form action="dettagli.html" method="get" id="formSelezione">
-        <div class="container">
-            <div class="containerSelect">
-            <select id="selectRegione" class="seleziona">
-                <option name="null">Seleziona Regione</option>
-            </select>
-            <select id="selectProvincia" class="seleziona">
-                <option name="null">Seleziona Provincia</option>
-            </select>
-            <select id="selettore" class="seleziona" name="comune">
-                <option name="null">Seleziona Comune</option>
-            </select>
+        <main> 
+            <div class="carousel-bg"></div>
+            <div class="overlay"></div>
+            <div class="content">
+                    <h2 class="title"><b>APP METEO</b></h2>
+                        <form action="dettagli.html" method="get" id="formSelezione">
+                        <div class="container">
+                                <div class="containerSelect">
+                                    <select id="selectRegione" class="seleziona">
+                                        <option name="null">Seleziona Regione</option>
+                                    </select>
+                                    <select id="selectProvincia" class="seleziona">
+                                        <option name="null">Seleziona Provincia</option>
+                                    </select>
+                                    <select id="selettore" class="seleziona" name="comune">
+                                        <option name="null">Seleziona Comune</option>
+                                    </select>
+                                </div>
+                                <div class="button-container">
+                                    <center><button type="submit" id="invia">Ricerca Meteo</button></center>
+                                    <input type="hidden" name="lat" value="0" id="lat">
+                                    <input type="hidden" name="lon" value="0" id="lon"><br>
+                                    <center><button type="button"id="mostra_comuni">mostra comuni</button></center>
+                                    
+                                    <br><br><br>
+                                </div>
+                                <div id="map"></div>
+                                  
+                        </div>
+                        </form>       
             </div>
+             
+        </main>
+        
 
-            <div id="map"></div>
-        </div>
-        <input type="hidden" name="lat" value="0" id="lat">
-        <input type="hidden" name="lon" value="0" id="lon">
-        <center><button type="submit" id="invia">Invia</button></center>
-    </form>
-        <center><button id="mostra_comuni">mostra comuni</button></center> 
-
-        <br><br><br><br><br><br>
-
+        
         
 
         <!-- script della pagina-->
