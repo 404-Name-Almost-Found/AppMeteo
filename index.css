@@ -54,21 +54,22 @@ main {
     position: relative;
     width: 100%;
     height: 100vh; /* o quello che preferisci */
-    overflow: hidden;
+    overflow: visible;
 }
 
 /* CAROUSEL DI SFONDO */
 .carousel-bg {
-    position: absolute;
+    position: fixed;
     inset: 0;
+    height: 100vh;
     background-size: cover;
     background-position: center;
-    animation: slide 15s infinite linear;
+    animation: slide 20s infinite linear;
 }
 
 /* FILTRO GRIGIO TRASPARENTE */
 .overlay {
-    position: absolute;
+    position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.4); /* grigio scuro trasparente */
     z-index: 1;
@@ -86,8 +87,10 @@ main {
 /* ANIMAZIONE CAROUSEL */
 @keyframes slide {
     0%   { background-image: url("img/giornataNeve.jpg"); }
-    33%  { background-image: url("img/giornataNuvolosa.jpg"); }
-    66%  { background-image: url("img/giornataSole.jpg"); }
+    20%  { background-image: url("img/giornataNuvolosa.jpg"); }
+    40%  { background-image: url("img/giornataSole.jpg"); }
+    60% { background-image: url("img/pioggiaGiornata.jpg"); }
+    80% { background-image: url("img/giornatatramonto.webp"); }
     100% { background-image: url("img/giornataNeve.jpg"); }
 }
 
@@ -97,6 +100,7 @@ main {
     height: 60vh;
     width: 60%;
     margin: auto;
+    display:none;
 }
 .containerSelect{
     display:flex;
@@ -151,6 +155,20 @@ button:hover::before{
     opacity:1;
     animation: animate 8s linear infinite;
 }
+.footerIndex{
+    display:block;
+    bottom:0;
+    background-color: transparent;
+    color: aliceblue;
+    text-align: center;
+    padding: 10px;
+    font-family: nature_medium;
+    width:100%;
+    border:1px solid rgb(171, 168, 168);
+    border-radius:10px ;
+}
+
+
 /*stile pagina dettagli*/
 .dettagli{
     background-color: rgb(14, 31, 83);
@@ -269,6 +287,40 @@ h3{
   font-size: 2rem;
   z-index: 9999;
 }
+
+/* Tooltip nascosto */
+.tooltip {
+  position: absolute;
+  bottom: 120%; /* sopra il div */
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+/* Freccetta */
+.tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
+}
+
+/* Mostra tooltip al passaggio */
+.rigaGiorni:hover .tooltip {
+  opacity: 1;
+}
+
 
 
 @media screen and (max-width:1000px)

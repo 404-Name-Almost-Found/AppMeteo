@@ -9,6 +9,16 @@ L.tileLayer(
         attribution: '&copy; OpenStreetMap contributors'
     }
 ).addTo(map);
+window.addEventListener("pageshow", function (event) {
+    const navEntries = performance.getEntriesByType("navigation");
+    const navType = navEntries.length > 0 ? navEntries[0].type : null;
+
+    // Se la pagina è stata ripristinata dalla cache
+    // oppure è stata raggiunta con back/forward
+    if (event.persisted || navType === "back_forward") {
+        window.location.reload();
+    }
+});
 
 
 const selectValue=document.getElementById("selettore");
@@ -126,58 +136,73 @@ selectValue.addEventListener("change",function(){
 form.addEventListener("submit",function(e){
     if(!invio)
     {
+        window.alert("Seleziona un comune valido prima di inviare il modulo")
         e.preventDefault();
-        
     }
 })
 
 //per mostrare i comuni sulla cartina
 const comuniLayer = L.layerGroup().addTo(map);
 let mostraComuni=document.getElementById("mostra_comuni")
+const chiudiMappaBtn=document.getElementById("chiudiMappa")
 
 mostraComuni.addEventListener("click", async function () {
-
+    
     const provinciaSelezionata = selectProvincia.options[selectProvincia.selectedIndex].getAttribute("name");
+    if(!provinciaSelezionata!=="null")
+    {
+        document.getElementById("map").style.display="block"
+        map.invalidateSize();
+        // Rimuove tutti i marker precedenti
+        comuniLayer.clearLayers();
 
-    // Rimuove tutti i marker precedenti
+        // Filtra solo i comuni della provincia selezionata
+        const comuniProvincia = ElencoComuni.filter(c => c[1] === provinciaSelezionata)
+
+        const richieste = comuniProvincia.map(comune => {
+            //coustruisce l'url per l'API
+            const url =
+                "https://geocoding-api.open-meteo.com/v1/search?name=" +
+                comune[0].replaceAll(" ", "%20") +
+                "&count=1&language=it&format=json";
+
+            return fetch(url)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.results && data.results.length > 0) {
+                        const { latitude, longitude } = data.results[0]
+                        return [latitude, longitude, comune[0]]
+                    }
+                })
+        })
+
+        //Esegue più fetch in parallelo e aspetta che finiscano tutte
+        const coordinate = await Promise.all(richieste)
+
+        //aggiunge tutti i marker alla mappa
+        coordinate.forEach(c => {
+            if (c) {
+                L.marker([c[0], c[1]])
+                .addTo(comuniLayer)
+                .bindPopup(`<b>${c[2]}</b><br>Clicca per selezionare`)
+                .on("click", () => {
+                    selezionaComuneDaMappa(c[0], c[1], c[2]);
+                })
+                //senza funziona 1 sola volta
+                setInterval(500, selezionaComuneDaMappa)
+            }
+        })
+        chiudiMappaBtn.style.display="block";
+    }
+    else{
+        window.alert("Seleziona prima una provincia")
+    }
+    
+})
+chiudiMappaBtn.addEventListener("click",function(){
+    document.getElementById("map").style.display="none"
+    chiudiMappaBtn.style.display="none";
     comuniLayer.clearLayers();
-
-    // Filtra solo i comuni della provincia selezionata
-    const comuniProvincia = ElencoComuni.filter(c => c[1] === provinciaSelezionata)
-
-    const richieste = comuniProvincia.map(comune => {
-        //coustruisce l'url per l'API
-        const url =
-            "https://geocoding-api.open-meteo.com/v1/search?name=" +
-            comune[0].replaceAll(" ", "%20") +
-            "&count=1&language=it&format=json";
-
-        return fetch(url)
-            .then(res => res.json())
-            .then(data => {
-                if (data.results && data.results.length > 0) {
-                    const { latitude, longitude } = data.results[0]
-                    return [latitude, longitude, comune[0]]
-                }
-            })
-    })
-
-    //Esegue più fetch in parallelo e aspetta che finiscano tutte
-    const coordinate = await Promise.all(richieste)
-
-    //aggiunge tutti i marker alla mappa
-    coordinate.forEach(c => {
-        if (c) {
-            L.marker([c[0], c[1]])
-            .addTo(comuniLayer)
-            .bindPopup(`<b>${c[2]}</b><br>Clicca per selezionare`)
-            .on("click", () => {
-                selezionaComuneDaMappa(c[0], c[1], c[2]);
-            })
-            //senza funziona 1 sola volta
-            setInterval(500, selezionaComuneDaMappa)
-        }
-    })
 })
 
 
