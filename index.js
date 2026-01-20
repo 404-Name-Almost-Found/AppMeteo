@@ -9,6 +9,7 @@ L.tileLayer(
         attribution: '&copy; OpenStreetMap contributors'
     }
 ).addTo(map);
+// Ricarica la pagina se viene caricata dalla cache o tramite back/forward
 window.addEventListener("pageshow", function (event) {
     const navEntries = performance.getEntriesByType("navigation");
     const navType = navEntries.length > 0 ? navEntries[0].type : null;
@@ -24,6 +25,7 @@ window.addEventListener("pageshow", function (event) {
 const selectValue=document.getElementById("selettore");
 const selectRegione=document.getElementById("selectRegione")
 const selectProvincia=document.getElementById("selectProvincia")
+const footer=document.getElementsByClassName("footerIndex")[0]
 const elem=document.createElement("option")
 let ElencoComuni=[];
 let ElencoRegioni=[];
@@ -149,13 +151,13 @@ const chiudiMappaBtn=document.getElementById("chiudiMappa")
 mostraComuni.addEventListener("click", async function () {
     
     const provinciaSelezionata = selectProvincia.options[selectProvincia.selectedIndex].getAttribute("name");
-    if(!provinciaSelezionata!=="null")
+    if(provinciaSelezionata!=="null")
     {
         document.getElementById("map").style.display="block"
         map.invalidateSize();
         // Rimuove tutti i marker precedenti
         comuniLayer.clearLayers();
-
+        footer.style.position="static";
         // Filtra solo i comuni della provincia selezionata
         const comuniProvincia = ElencoComuni.filter(c => c[1] === provinciaSelezionata)
 
@@ -201,8 +203,9 @@ mostraComuni.addEventListener("click", async function () {
 })
 chiudiMappaBtn.addEventListener("click",function(){
     document.getElementById("map").style.display="none"
-    chiudiMappaBtn.style.display="none";
-    comuniLayer.clearLayers();
+    chiudiMappaBtn.style.display="none"
+    comuniLayer.clearLayers()
+    footer.style.position="fixed"
 })
 
 

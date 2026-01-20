@@ -90,7 +90,7 @@ main {
     20%  { background-image: url("img/giornataNuvolosa.jpg"); }
     40%  { background-image: url("img/giornataSole.jpg"); }
     60% { background-image: url("img/pioggiaGiornata.jpg"); }
-    80% { background-image: url("img/giornatatramonto.webp"); }
+    80% { background-image: url("img/giornatatramonto.jpg"); }
     100% { background-image: url("img/giornataNeve.jpg"); }
 }
 
@@ -156,6 +156,7 @@ button:hover::before{
     animation: animate 8s linear infinite;
 }
 .footerIndex{
+    position:fixed;
     display:block;
     bottom:0;
     background-color: transparent;
