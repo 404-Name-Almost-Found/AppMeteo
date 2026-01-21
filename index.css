@@ -90,7 +90,7 @@ main {
     20%  { background-image: url("img/giornataNuvolosa.jpg"); }
     40%  { background-image: url("img/giornataSole.jpg"); }
     60% { background-image: url("img/pioggiaGiornata.jpg"); }
-    80% { background-image: url("img/giornatatramonto.jpg"); }
+    80% { background-image: url("img/giornataTramonto.jpg"); }
     100% { background-image: url("img/giornataNeve.jpg"); }
 }
 
@@ -339,3 +339,4 @@ h3{
         font-size:80%;
     }
 }
+
