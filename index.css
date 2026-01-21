@@ -98,7 +98,7 @@ main {
 
 #map {
     height: 60vh;
-    width: 60%;
+    width: 100%;
     margin: auto;
     display:none;
 }
@@ -324,19 +324,109 @@ h3{
 
 
 
-@media screen and (max-width:1000px)
-{
-    .containerSelect{
-        display:block;
+/* --- BREAKPOINT 1200px --- */
+@media screen and (max-width: 1200px) {
+    .container {
+        width: 80%;
     }
-    .seleziona{
-        width:100%;
-    }
-    .commenti{
-        font-size:80%;
-    }
-    .commentiOrario{
-        font-size:80%;
+
+    .title {
+        font-size: 2.5em;
+        width: 80%;
     }
 }
+
+/* --- BREAKPOINT 900px --- */
+@media screen and (max-width: 900px) {
+    .container {
+        width: 90%;
+    }
+
+    .containerSelect {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .seleziona {
+        width: 100%;
+        font-size: 110%;
+    }
+
+    button {
+        width: 80%;
+        font-size: 1em;
+    }
+
+    #map {
+        height: 50vh;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .title {
+        font-size: 2em;
+        width: 90%;
+    }
+
+    .button-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    button {
+        width: 90%;
+        padding: 12px;
+    }
+
+    .footerIndex {
+        font-size: 0.9em;
+    }
+}
+
+/* --- BREAKPOINT 500px (smartphone) --- */
+@media screen and (max-width: 500px) {
+    body {
+        font-size: 90%;
+    }
+
+    .title {
+        font-size: 1.7em;
+    }
+
+    .seleziona {
+        font-size: 100%;
+        padding: 12px;
+    }
+
+    #map {
+        height: 45vh;
+    }
+
+    .footerIndex {
+        padding: 8px;
+        font-size: 0.8em;
+    }
+}
+
+/* --- BREAKPOINT 380px (schermi molto piccoli) --- */
+@media screen and (max-width: 380px) {
+    .title {
+        font-size: 1.5em;
+    }
+
+    .seleziona {
+        font-size: 95%;
+        padding: 10px;
+    }
+
+    button {
+        font-size: 90%;
+        padding: 10px;
+    }
+
+    #map {
+        height: 40vh;
+    }
+}
+
 
