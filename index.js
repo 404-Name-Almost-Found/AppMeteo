@@ -150,8 +150,8 @@ mostraComuni.addEventListener("click", async function () {
     
     const provinciaSelezionata = selectProvincia.options[selectProvincia.selectedIndex].getAttribute("name");
 
-    if (!provinciaSelezionata) {
-        alert("Seleziona prima una provincia");
+    if (provinciaSelezionata==="null") {
+        window.alert("Seleziona prima una provincia");
         return
     }
     document.getElementById("map").style.display="block"
