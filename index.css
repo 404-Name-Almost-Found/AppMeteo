@@ -1,7 +1,6 @@
 html, body {
     height: 100%;
     margin: 0;
-    background-color: aliceblue;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 .title{
@@ -35,6 +34,11 @@ h2 { margin-top: 0; }
     width:32%;
     margin:5px;
     transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+option {
+    background-color: transparent;
+    color: black;
+    font-family: nature_medium;
 }
 .seleziona:hover{
     box-shadow: 0 6px 15px rgba(0,0,0,0.25);

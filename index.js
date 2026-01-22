@@ -43,7 +43,7 @@ fetch("https://raw.githubusercontent.com/matteocontrini/comuni-json/master/comun
     .then(comuni => {
         //popola i diversi elenchi
         for(let i=0;i<comuni.length;i++){
-            ElencoComuni[i]=[comuni[i].nome,comuni[i].sigla] //comune=[nomeComune, siglaProvincia]
+            ElencoComuni[i]=[comuni[i].nome,comuni[i].sigla,comuni[i].regione["nome"]] //comune=[nomeComune, siglaProvincia,nomeRegione]
             ElencoRegioni[i]=comuni[i].regione["nome"] 
             ElencoProvince[i]=[comuni[i].provincia["nome"],comuni[i].sigla,comuni[i].regione["nome"]] //provincia=[nomeProvincia, siglaProvincia, nomeRegione]
         }
@@ -158,22 +158,22 @@ mostraComuni.addEventListener("click", async function () {
         footer.style.position="static";
         // Filtra solo i comuni della provincia selezionata
         const comuniProvincia = ElencoComuni.filter(c => c[1] === provinciaSelezionata)
-
         const richieste = comuniProvincia.map(comune => {
             //costruisce l'url per l'API
             const url =
-                "https://geocoding-api.open-meteo.com/v1/search?name=" +
-                comune[0].replaceAll(" ", "%20") +
-                "&count=1&language=it&country=IT&admin1=" +comune[1]+"format=json";
+                "https://geocoding-api.open-meteo.com/v1/search?" +
+                "name=" + encodeURIComponent(comune[0]) +"&country=IT" +"&language=it" +"&count=5" +"&admin1=" + encodeURIComponent(comune[2])+"&format=json";
             console.log(url)
             return fetch(url)
                 .then(res => res.json())
                 .then(data => {
-                    if (data.results && data.results.length > 0) {
-                        const { latitude, longitude } = data.results[0]
-                        return [latitude, longitude, comune[0]]
-                    }
-                })
+                    if (!data.results) return null;
+                    const risultatoCorretto = data.results.find(r =>
+                        r.admin1 === comune[2]   // REGIONE
+                    );
+                    if (!risultatoCorretto) return null;
+                    return [risultatoCorretto.latitude,risultatoCorretto.longitude,comune[0]];
+            })
         })
         //Esegue più fetch in parallelo e aspetta che finiscano tutte
         const coordinate = await Promise.all(richieste)
@@ -207,10 +207,17 @@ mostraComuni.addEventListener("click", async function () {
                                 selezionaComuneDaMappa(c[0], c[1], c[2]);
                             })
                             //senza funziona 1 sola volta
-                            setInterval(500, selezionaComuneDaMappa)
+                            setInterval(selezionaComuneDaMappa,500)
                 })
             }
         })
+        await Promise.all();
+        if (comuniLayer.getLayers().length > 0) {
+            map.fitBounds(comuniLayer.getBounds(), {
+                padding: [30, 30],
+                maxZoom: 12
+            });
+        }
         chiudiMappaBtn.style.display="block";
     }
     else{
