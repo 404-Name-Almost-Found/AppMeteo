@@ -174,86 +174,97 @@ button:hover::before{
 }
 
 
-/*stile pagina dettagli*/
+/* --- STILE BASE --- */
+/* --- STILE BASE --- */
 .dettagli{
     background-color: rgb(14, 31, 83);
     max-width: 600px;
+    width: 100%;
     margin: auto;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
     padding:10px 20px;
     color:white;
 }
+
 .commenti{
     color:rgb(171, 168, 168);
-    font-size:60%;
+    font-size:0.9rem;
 }
+
 .riga{
     width:100%;
     display:flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
 }
-h1{
+
+h1, p{
     margin:0;
 }
-p{
-    margin:0;
-}
+
 .destra img{
     width: 50px; 
     height: 50px;
 }
-.containerOra{
-    display:flex;
-    color:rgb(171, 168, 168);
-    font-size:60%;
-}
+
+/* --- TEMPERATURE ORARIE --- */
 .containerTemperature{
-    
     margin-top:20px;
     display:flex;
 }
+
 .TemperaturaOra{
     width:16.67%;
     text-align:center;
     justify-content: center;
 }
+
+h3{
+    margin:0;
+}
+
+/* --- ICONE ORARIE --- */
 .containerIcone{
     display:flex;
-    font-size:250%;
 }
+
 .iconaBox{
     width:16.67%;
     text-align:center;
-    justify-content: center;
     margin:0;
+    justify-content: center;
 }
+
 .icone{
     width:40px;
     height:40px;
 }
-h3{
-    margin:0;
+
+/* --- ORARI --- */
+.containerOra{
+    display:flex;
 }
+
 .orario{
     width:16.67%;
     text-align:center;
     justify-content: center;
 }
-.orario p{
-    margin:0;
-}
+
 .commentiOrario{
     color:rgb(171, 168, 168);
-    font-size:60%;
+    font-size:0.8rem;
 }
+
+/* --- GIORNI SUCCESSIVI --- */
 .containerGiorniSuccessivi{
     margin-top:20px;
-    display:block;
     background-color: rgb(29, 50, 116);
     border-radius:10px;
 }
+
 .rigaGiorni{
     display:flex;
     justify-content:space-between;
@@ -263,40 +274,28 @@ h3{
     margin:1px;
     border-radius:10px;
     transition: box-shadow 0.2s ease, transform 0.2s ease;
+    position: relative;
 }
+
 .rigaGiorni:hover{
     background-color: rgb(43, 67, 146);
     transform: translateY(-2px);
 }
-.sinistraGiorni{
+
+.sinistraGiorni, .centroGiorni, .destraGiorni{
     width:33%;
+    text-align:center;
 }
-.centroGiorni{
-    width:33%;
-}
+
 .centroGiorni img{
     width:60px;
     height:60px;
 }
-.destraGiorni{
-    width:33%;
-    font-size:80%;
-}
-#loader {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: white;
-  font-size: 2rem;
-  z-index: 9999;
-}
 
-/* Tooltip nascosto */
+/* --- TOOLTIP --- */
 .tooltip {
   position: absolute;
-  bottom: 120%; /* sopra il div */
+  bottom: 120%;
   left: 50%;
   transform: translateX(-50%);
   background: #333;
@@ -309,7 +308,6 @@ h3{
   transition: opacity 0.25s ease;
 }
 
-/* Freccetta */
 .tooltip::after {
   content: "";
   position: absolute;
@@ -321,14 +319,9 @@ h3{
   border-color: #333 transparent transparent transparent;
 }
 
-/* Mostra tooltip al passaggio */
 .rigaGiorni:hover .tooltip {
   opacity: 1;
 }
-
-
-
-/* --- BREAKPOINT 1200px --- */
 @media screen and (max-width: 1200px) {
     .container {
         width: 80%;
@@ -339,8 +332,6 @@ h3{
         width: 80%;
     }
 }
-
-/* --- BREAKPOINT 900px --- */
 @media screen and (max-width: 900px) {
     .container {
         width: 90%;
@@ -355,8 +346,7 @@ h3{
         width: 100%;
         font-size: 110%;
     }
-
-    button {
+     button {
         width: 80%;
         font-size: 1em;
     }
@@ -366,7 +356,13 @@ h3{
     }
 }
 
-@media screen and (max-width: 700px) {
+
+/* ----------------------------- */
+/*        BREAKPOINTS           */
+/* ----------------------------- */
+
+/* --- Tablet (max 768px) --- */
+@media screen and (max-width: 768px) {
     .title {
         font-size: 2em;
         width: 90%;
@@ -385,9 +381,20 @@ h3{
     .footerIndex {
         font-size: 0.9em;
     }
+    .TemperaturaOra,
+    .iconaBox,
+    .orario {
+        width: 33.33%;
+        margin-bottom: 10px;
+    }
+
+    .centroGiorni img{
+        width:50px;
+        height:50px;
+    }
 }
 
-/* --- BREAKPOINT 500px (smartphone) --- */
+/* --- Smartphone (max 500px) --- */
 @media screen and (max-width: 500px) {
     body {
         font-size: 90%;
@@ -401,19 +408,68 @@ h3{
         font-size: 100%;
         padding: 12px;
     }
-
-    #map {
-        height: 45vh;
-    }
-
     .footerIndex {
         padding: 8px;
         font-size: 0.8em;
     }
+
+    #map {
+        height: 45vh;
+    }
+    .riga{
+        flex-direction: column;
+        text-align:center;
+        gap: 10px;
+    }
+
+    #Temperatura{
+        font-size: 2.2rem;
+    }
+
+    .destra img{
+        width:40px;
+        height:40px;
+    }
+
+    .TemperaturaOra,
+    .iconaBox,
+    .orario {
+        width: 50%;
+    }
+
+    .centroGiorni img{
+        width:45px;
+        height:45px;
+    }
+
+    .sinistraGiorni, .centroGiorni, .destraGiorni{
+        width:100%;
+        margin:5px 0;
+    }
+
+    .rigaGiorni{
+        flex-direction: column;
+        text-align:center;
+    }
 }
 
-/* --- BREAKPOINT 380px (schermi molto piccoli) --- */
-@media screen and (max-width: 380px) {
+/* --- Schermi molto piccoli (max 360px) --- */
+@media screen and (max-width: 360px) {
+
+    .TemperaturaOra,
+    .iconaBox,
+    .orario {
+        width: 100%;
+    }
+
+    #Temperatura{
+        font-size: 1.8rem;
+    }
+
+    .centroGiorni img{
+        width:40px;
+        height:40px;
+    }
     .title {
         font-size: 1.5em;
     }
@@ -432,5 +488,3 @@ h3{
         height: 40vh;
     }
 }
-
-

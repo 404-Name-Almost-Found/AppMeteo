@@ -62,7 +62,6 @@ fetch("https://raw.githubusercontent.com/matteocontrini/comuni-json/master/comun
     .catch(err => {
         //in caso di errore all'accesso del link la finestra mostra un errore
         window.alert("Collegamento non disponibile, controlla pi\u00f9 tardi")
-        console.log(err)
     });
 
 
@@ -142,89 +141,111 @@ form.addEventListener("submit",function(e){
 })
 
 //per mostrare i comuni sulla cartina
-const comuniLayer = L.layerGroup().addTo(map);
+const comuniLayer = L.featureGroup().addTo(map);
 let mostraComuni=document.getElementById("mostra_comuni")
 const chiudiMappaBtn=document.getElementById("chiudiMappa")
 
 mostraComuni.addEventListener("click", async function () {
-    
-    const provinciaSelezionata = selectProvincia.options[selectProvincia.selectedIndex].getAttribute("name");
-    if(provinciaSelezionata!=="null")
-    {
-        document.getElementById("map").style.display="block"
-        map.invalidateSize();
-        // Rimuove tutti i marker precedenti
-        comuniLayer.clearLayers();
-        footer.style.position="static";
-        // Filtra solo i comuni della provincia selezionata
-        const comuniProvincia = ElencoComuni.filter(c => c[1] === provinciaSelezionata)
-        const richieste = comuniProvincia.map(comune => {
-            //costruisce l'url per l'API
-            const url =
-                "https://geocoding-api.open-meteo.com/v1/search?" +
-                "name=" + encodeURIComponent(comune[0]) +"&country=IT" +"&language=it" +"&count=5" +"&admin1=" + encodeURIComponent(comune[2])+"&format=json";
-            console.log(url)
-            return fetch(url)
-                .then(res => res.json())
-                .then(data => {
-                    if (!data.results) return null;
-                    const risultatoCorretto = data.results.find(r =>
-                        r.admin1 === comune[2]   // REGIONE
-                    );
-                    if (!risultatoCorretto) return null;
-                    return [risultatoCorretto.latitude,risultatoCorretto.longitude,comune[0]];
-            })
-        })
-        //Esegue più fetch in parallelo e aspetta che finiscano tutte
-        const coordinate = await Promise.all(richieste)
 
-        //aggiunge tutti i marker alla mappa
-        coordinate.forEach(c => {
-            if (c) {
-                const URLMeteo="https://api.open-meteo.com/v1/forecast?latitude="+c[0]+"&longitude="+c[1]+"&daily=wind_speed_10m_max,precipitation_sum,weather_code,sunrise,sunset,temperature_2m_max,temperature_2m_min&hourly=relative_humidity_2m,weather_code,temperature_2m,cloud_cover,cloud_cover_low,cloud_cover_mid,cloud_cover_high,wind_speed_10m,precipitation&current=relative_humidity_2m,weather_code,temperature_2m,wind_speed_10m,relative_humidity_2m,is_day,rain,cloud_cover,is_day&utm_source=chatgpt.com"
-                
-                fetch(URLMeteo)
-                    .then(response => response.json())
-                        .then(meteo =>{
-                            let temperatura;
-                            let temperaturaMax=meteo.daily.temperature_2m_max[0]
-                            let temperaturaMin=meteo.daily.temperature_2m_min[0]
-                            const indiceOra=meteo.hourly.time.indexOf(getFormattedDate());
-                            if (meteo.current.time === getFormattedDate()){
-                                temperatura=meteo.current.temperature_2m;
-                            }
-                            else{
-                                temperatura=meteo.hourly.temperature_2m[indiceOra];
-                            }
-                            const popupHTML = `<b>${c[2]}</b><br>Temperatura Attuale:${temperatura}°C<br>MAX:${temperaturaMax}°C - MIN:${temperaturaMin}°C<br>
-                            <a href="dettagli.html?comune=${encodeURIComponent(c[2])}&lat=${c[0]}&lon=${c[1]}">
-                            GUARDA DETTAGLI
-                            </a>`;
-                            L.marker([c[0], c[1]])
-                            .addTo(comuniLayer)
-                            .bindPopup(popupHTML)
-                            .on("click", () => {
-                                selezionaComuneDaMappa(c[0], c[1], c[2]);
-                            })
-                            //senza funziona 1 sola volta
-                            setInterval(selezionaComuneDaMappa,500)
-                })
-            }
-        })
-        await Promise.all();
-        if (comuniLayer.getLayers().length > 0) {
-            map.fitBounds(comuniLayer.getBounds(), {
-                padding: [30, 30],
-                maxZoom: 12
+    //ottengo la sigla della provincia
+    const provinciaSelezionata = selectProvincia.options[selectProvincia.selectedIndex].getAttribute("name");
+
+    if (provinciaSelezionata === "null") {
+        window.alert("Seleziona prima una provincia");
+        return;
+    }
+    //mostro la mappa prima nascosta
+    document.getElementById("map").style.display = "block";
+    map.invalidateSize();
+    comuniLayer.clearLayers();
+    footer.style.position = "static";
+
+    // Filtra i comuni della provincia
+    const comuniProvincia = ElencoComuni.filter(c => c[1] === provinciaSelezionata);
+
+    // Ottieni coordinate dei comuni (solo geocoding)
+    const richieste = comuniProvincia.map(comune => {
+        const url =
+            "https://geocoding-api.open-meteo.com/v1/search?" +
+            "name=" + encodeURIComponent(comune[0]) +
+            "&country=IT&language=it&count=5&admin1=" + encodeURIComponent(comune[2]) +
+            "&format=json";
+
+        return fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                if (!data.results) return null;
+                //poiché ci sono molti comuni con nomi simili è necessario fare una verifica della regione del comune
+                const risultatoCorretto = data.results.find(r => r.admin1 === comune[2]);
+                if (!risultatoCorretto) return null;
+
+                return {
+                    lat: risultatoCorretto.latitude,
+                    lon: risultatoCorretto.longitude,
+                    nome: comune[0]
+                };
             });
+    });
+
+    const coordinate = await Promise.all(richieste);
+
+    coordinate.forEach(c => {
+        if (!c) return;
+        const marker = L.marker([c.lat, c.lon]).addTo(comuniLayer);
+        // Popup iniziale
+        marker.bindPopup(`<b>${c.nome}</b><br>Caricamento meteo...`);
+        
+        // Fetch meteo SOLO al click
+        marker.on("click", async () => {
+            selezionaComuneDaMappa(c.lat, c.lon, c.nome);
+            const urlMeteo =
+                "https://api.open-meteo.com/v1/forecast?latitude=" + c.lat +
+                "&longitude=" + c.lon +
+                "&daily=wind_speed_10m_max,precipitation_sum,weather_code,sunrise,sunset,temperature_2m_max,temperature_2m_min" +
+                "&hourly=relative_humidity_2m,weather_code,temperature_2m,cloud_cover,cloud_cover_low,cloud_cover_mid,cloud_cover_high,wind_speed_10m,precipitation" +
+                "&current=relative_humidity_2m,weather_code,temperature_2m,wind_speed_10m,is_day,rain,cloud_cover" +
+                "&utm_source=chatgpt.com";
+
+            const response = await fetch(urlMeteo);
+            const meteo = await response.json();
+
+            const indiceOra = meteo.hourly.time.indexOf(getFormattedDate());
+            const temperatura = (meteo.current.time === getFormattedDate())? meteo.current.temperature_2m: meteo.hourly.temperature_2m[indiceOra];
+
+            const temperaturaMax = meteo.daily.temperature_2m_max[0];
+            const temperaturaMin = meteo.daily.temperature_2m_min[0];
+
+            const popupHTML = `
+                <b>${c.nome}</b><br>
+                Temperatura Attuale: ${temperatura}°C<br>
+                MAX: ${temperaturaMax}°C - MIN: ${temperaturaMin}°C<br>
+                <a href="dettagli.html?comune=${encodeURIComponent(c.nome)}&lat=${c.lat}&lon=${c.lon}">
+                    GUARDA DETTAGLI
+                </a>
+            `;
+            marker.setPopupContent(popupHTML);
+        });
+    });
+    // Se un comune è già selezionato, zooma direttamente su quel comune
+    if (selectValue.value !== "Seleziona Comune"){
+        const comuneSelezionato = selectValue.value;
+        // Trova il comune nella lista delle coordinate
+        const comuneCoord = coordinate.find(c => c && c.nome === comuneSelezionato);
+
+        if (comuneCoord) {
+            map.setView([comuneCoord.lat, comuneCoord.lon], 12); // zoom sul comune
+            chiudiMappaBtn.style.display = "block";
+            return; // evita il fitBounds
         }
-        chiudiMappaBtn.style.display="block";
     }
-    else{
-        window.alert("Seleziona prima una provincia")
+
+    // Zoom automatico sulla provincia
+    if (comuniLayer.getLayers().length > 0) {
+        map.fitBounds(comuniLayer.getBounds(), { padding: [10, 10] });
     }
-    
-})
+    chiudiMappaBtn.style.display = "block";
+});
+//chiude la mappa tramite un button
 chiudiMappaBtn.addEventListener("click",function(){
     document.getElementById("map").style.display="none"
     chiudiMappaBtn.style.display="none"
@@ -234,6 +255,7 @@ chiudiMappaBtn.addEventListener("click",function(){
 
 
 let markerSelezionato = null;
+//funzione che seleziona automaticamente il selettore del comune quando si clicca sul marker
 function selezionaComuneDaMappa(latitudine, longitudine, nomeComune) {
 
     //aggiorna i valori quando si clicca su un marker
@@ -250,10 +272,11 @@ function selezionaComuneDaMappa(latitudine, longitudine, nomeComune) {
 
     markerSelezionato = this;
 }
+//funzione che serve per rimuovere duplicati
 function rimuoviDuplicati(arr) { 
     return [...new Set(arr)]
 }
-
+//funzione che serve per ottenere un orario formattato per poi compararlo con quello fornito dall'API
 function getFormattedDate() {
   const now = new Date();
 

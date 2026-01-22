@@ -1,7 +1,6 @@
 const queryString=window.location.search
 const urlParams=new URLSearchParams(queryString)
 document.addEventListener("DOMContentLoaded",function(){
-    document.getElementById("loader").style.display = "block"
     const URLMeteo="https://api.open-meteo.com/v1/forecast?latitude="+urlParams.get("lat")+"&longitude="+urlParams.get("lon")+"&daily=wind_speed_10m_max,precipitation_sum,weather_code,sunrise,sunset,temperature_2m_max,temperature_2m_min&hourly=relative_humidity_2m,weather_code,temperature_2m,cloud_cover,cloud_cover_low,cloud_cover_mid,cloud_cover_high,wind_speed_10m,precipitation&current=relative_humidity_2m,weather_code,temperature_2m,wind_speed_10m,relative_humidity_2m,is_day,rain,cloud_cover,is_day&utm_source=chatgpt.com"
     fetch(URLMeteo)
         .then(response => response.json())
@@ -183,7 +182,6 @@ document.addEventListener("DOMContentLoaded",function(){
                 }
             }
         })
-        document.getElementById("loader").style.display = "none"
     
 })
 //ottiene un orario formattato del momento come quello dato dall'oggetto ottenuto dal link api-open-ai
