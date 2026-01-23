@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded",function(){
             /*confrontare le stringhe delle ore:se l'ora presente corrisponde con current
             allora prende le informazioni dal current,altrimenti prende da hourly tramite indiceOra
             */
-            if (meteo.current.time === getFormattedDate()){
+            if (meteo.current.time.substring(0,13) === getFormattedDate().substring(0,13)){
                 temperaturaAttuale.innerHTML=meteo.current.temperature_2m+"°C"
                 weatherCode==meteo.current.weather_code
                 isDay=meteo.current.is_day
@@ -151,7 +151,6 @@ document.addEventListener("DOMContentLoaded",function(){
             {
                 tempGiorniSuccessivi[i].innerHTML=meteo.daily.temperature_2m_min[i+1]+"°C / "+meteo.daily.temperature_2m_max[i+1]+"°C"
                 let weatherCode=meteo.daily.weather_code[i+1]
-                console.log("Giorno "+(i+1)+" code: "+weatherCode)
                 let umidita=0
                 for(let j=0;j<24;j++){
                     umidita+=meteo.hourly.relative_humidity_2m[cont+j]
