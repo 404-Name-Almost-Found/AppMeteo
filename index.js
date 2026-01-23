@@ -213,7 +213,6 @@ mostraComuni.addEventListener("click", async function () {
             const response = await fetch(urlMeteo);
             const meteo = await response.json();
             const indiceOra = meteo.hourly.time.indexOf(getFormattedDate());
-            console.log(meteo.current.time)
             const temperatura = (meteo.current.time.substring(0,13) === getFormattedDate().substring(0,13))? meteo.current.temperature_2m: meteo.hourly.temperature_2m[indiceOra];
 
             const temperaturaMax = meteo.daily.temperature_2m_max[0];
