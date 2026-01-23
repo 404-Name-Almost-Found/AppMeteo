@@ -212,7 +212,6 @@ mostraComuni.addEventListener("click", async function () {
                 "&utm_source=chatgpt.com";
             const response = await fetch(urlMeteo);
             const meteo = await response.json();
-            const indiceOra = meteo.hourly.time.indexOf(getFormattedDate());
             const temperatura =  meteo.current.temperature_2m
 
             const temperaturaMax = meteo.daily.temperature_2m_max[0];
