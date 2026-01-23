@@ -33,34 +33,11 @@ document.addEventListener("DOMContentLoaded",function(){
                 clock.innerHTML = new Date().toLocaleString();}
             , 1000);
             lastUpdate.innerHTML="Ultima Rilevazione: "+meteo.current.time
-
-            /*confrontare le stringhe delle ore:se l'ora presente corrisponde con current
-            allora prende le informazioni dal current,altrimenti prende da hourly tramite indiceOra
-            */
-            if (meteo.current.time.substring(0,13) === getFormattedDate().substring(0,13)){
-                temperaturaAttuale.innerHTML=meteo.current.temperature_2m+"°C"
-                weatherCode==meteo.current.weather_code
-                isDay=meteo.current.is_day
-                tempMaxMinVento.innerHTML="Max: "+meteo.daily.temperature_2m_max[0]+"°C - Min: "+meteo.daily.temperature_2m_min[0]+"°C"+" - Vento: "+meteo.current.wind_speed_10m+" km/h<br>Umidità: "+meteo.current.relative_humidity_2m+"% - Precipitazioni: "+meteo.daily.precipitation_sum[0]+" mm"
-            }
-            else{
-                temperaturaAttuale.innerHTML=meteo.hourly.temperature_2m[indiceOra]+"°C"
-                weatherCode=meteo.hourly.weather_code[indiceOra]
-                tempMaxMinVento.innerHTML="Max: "+meteo.daily.temperature_2m_max[0]+"°C - Min: "+meteo.daily.temperature_2m_min[0]+"°C"+" - Vento: "+meteo.hourly.wind_speed_10m[indiceOra]+" km/h<br>Umidità: "+meteo.hourly.relative_humidity_2m[indiceOra]+"% - Precipitazioni: "+meteo.daily.precipitation_sum[0]+" mm"
-                /*posiziona day nella posizione giusta per poter gestire se è notte o giorno nel momento di rilevazione
-                perché può accadere che è già notte o giorno ma current non cambia ancora il tempo di rilevazione
-                */
-                while(meteo.daily.sunrise[day].substring(0,10)===getFormattedDate().substring(0,10)){
-                    day++
-                }
-                //controlla se è giorno o notte
-                if(getFormattedDate()>=meteo.daily.sunrise[day-1] && getFormattedDate()<meteo.daily.sunset[day-1]){
-                    isDay=1
-                }
-                else{
-                    isDay=0
-                }
-            }
+            temperaturaAttuale.innerHTML=meteo.current.temperature_2m+"°C"
+            weatherCode==meteo.current.weather_code
+            isDay=meteo.current.is_day
+            tempMaxMinVento.innerHTML="Max: "+meteo.daily.temperature_2m_max[0]+"°C - Min: "+meteo.daily.temperature_2m_min[0]+"°C"+" - Vento: "+meteo.current.wind_speed_10m+" km/h<br>Umidità: "+meteo.current.relative_humidity_2m+"% - Precipitazioni: "+meteo.daily.precipitation_sum[0]+" mm"
+            isDay=meteo.current.isDay;
             //immagini sul tempo che variano in base al codice del tempo e in base all'ora(giorno o notte)
             if(weatherCode===0){
                 if(isDay==1)
